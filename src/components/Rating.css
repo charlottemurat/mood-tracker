@@ -1,0 +1,27 @@
+.rating-container {
+    display: flex;
+    justify-content: space-around;
+    width: 200px;
+    margin: 20px auto;
+  }
+  
+  .circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background-color: white;
+    color: black;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: 2px solid black;
+    cursor: pointer;
+    font-size: 18px;
+    font-weight: bold;
+  }
+  
+  .circle.selected {
+    background-color: blue;
+    color: white;
+  }
+  
