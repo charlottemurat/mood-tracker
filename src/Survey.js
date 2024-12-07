@@ -75,7 +75,7 @@ function Survey({ user, onSurveyComplete }) {
       const userId = user.uid;
       const today = new Date().toISOString().split("T")[0];
 
-      await setDoc(doc(db, "surveyResponses", userId), {
+      await setDoc(doc(db, "surveyResponses", userId, 'entries', today), {
         date: today,
         answers: updatedAnswers,
         userId: userId,
