@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { doc, getDoc, getDocs, collection } from "firebase/firestore";
 import { db } from "../firebase";
 import LineChart from "../components/LineChart";
-import { create } from "@mui/material/styles/createTransitions";
+import { entries } from "./testEntries"
 
 function ResultsPage({ user }) {
   const [weekSurveyData, setWeekSurveyData] = useState(null);
@@ -10,21 +10,6 @@ function ResultsPage({ user }) {
   const [weekChartTitle, setWeekChartTitle] = useState("");
   const [monthChartTitle, setMonthChartTitle] = useState("");
   const [loading, setLoading] = useState(true);
-
-  async function fetchSurveyResponses(userId) {
-    const docRef = doc(db, "surveyResponses", userId);
-    try {
-      const docSnap = await getDoc(docRef);
-      if (docSnap.exists()) {
-        return docSnap.data();
-      } else {
-        return null;
-      }
-    } catch (e) {
-      console.error(e);
-      return null;
-    }
-  }
 
   async function fetchAllSubmissions(userId) {
     try {
@@ -34,7 +19,7 @@ function ResultsPage({ user }) {
       const allEntries = querySnapshot.docs.map((doc) => ({
         ...doc.data(), // All stored fields
       }));
-      return allEntries;
+      return entries;
 
     } catch (error) {
       console.error("Error fetching submissions:", error);
@@ -70,7 +55,6 @@ function ResultsPage({ user }) {
       const formattedDate = pastDate.toISOString().split("T")[0];
       past7Days.push(formattedDate);
     }
-    console.log(past7Days)
     return past7Days;
   }
 
@@ -178,7 +162,6 @@ function ResultsPage({ user }) {
 
   useEffect(() => {
     async function loadResults() {
-        console.log(getPast30Days(new Date().toISOString().split("T")[0]));
         const weekData = await createWeeklyData(getPast7Days(new Date().toISOString().split("T")[0]), 0);
         const weekTitle = "Weekly Data (" + Object.keys(weekData)[0] + " to " + Object.keys(weekData)[6] + ')';
 
@@ -226,17 +209,7 @@ function ResultsPage({ user }) {
       }
       setLoading(false);
     }
-    async function loadSurveyData() {
-      const userId = user.uid;
-      const allSubmissions = await fetchAllSubmissions(userId);
-      console.log("Fetched Survey Data:", allSubmissions);
-    };
-  
-    loadSurveyData();
-
     loadResults();
-
-    createWeeklyData(getPast7Days(new Date().toISOString().split("T")[0]), 0);
   }, [user]);
 
   if (loading) {
@@ -253,7 +226,7 @@ function ResultsPage({ user }) {
         <option value="best-mood">Best Mood</option>
         <option value="worst-mood">Worst Mood</option>
         <option value="power">Power</option>
-        <option value="worried">Worried/Fearfull</option>
+        <option value="worried">Worried/Fearful</option>
         <option value="irritability">Irritability</option>
       </select>
       <div>

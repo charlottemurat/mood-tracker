@@ -3,6 +3,7 @@ import { setDoc, doc, getDoc } from "firebase/firestore";
 import { db } from "./firebase";
 import { useNavigate } from "react-router-dom";
 import Rating from "./components/Rating";
+import "./styles/Survey.css";
 
 function Survey({ user, onSurveyComplete }) {
   const questions = [
