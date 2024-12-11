@@ -1,27 +1,29 @@
 .rating-container {
     display: flex;
     justify-content: space-around;
-    width: 200px;
+    width: 400px;
     margin: 20px auto;
   }
   
   .circle {
-    width: 40px;
-    height: 40px;
+    width: 60px;
+    height: 60px;
     border-radius: 50%;
-    background-color: white;
-    color: black;
+    background-color: #EBEBD3;
+    color: #080357;
     display: flex;
     align-items: center;
     justify-content: center;
-    border: 2px solid black;
+    border: 4px solid #080357;
     cursor: pointer;
-    font-size: 18px;
+    font-size: 25px;
     font-weight: bold;
+    margin-left: 2px;
+    margin-right: 2px;
   }
   
   .circle.selected {
-    background-color: blue;
-    color: white;
+    background-color: #F95738;
+    color: #EBEBD3;
   }
   

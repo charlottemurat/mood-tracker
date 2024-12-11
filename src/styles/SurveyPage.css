@@ -1,0 +1,39 @@
+h1 {
+    font-family: "Palanquin Dark", sans-serif;
+    font-style: normal;
+    font-weight: 600;
+    color: #080357;
+    font-size: 35px;
+    text-align: center;
+}
+
+.survey {
+    margin-top: 120px;
+}
+
+h2 {
+    font-family: "Palanquin Dark", sans-serif;
+    font-style: normal;
+    font-weight: 100;
+    color: #F95738;
+    font-size: 30px;
+    text-align: center;
+}
+
+#next-wrapper {
+    text-align: center;
+}
+
+#next-submit-button {
+    font-family: "Palanquin Dark", sans-serif;
+    font-style: normal;
+    font-size: larger;
+    border-color: #F4D35E;
+    color: white;
+    border-radius: 0px;
+    border-width: 4px;
+    background-color: #EE964B;
+    width: 90px;
+    margin-bottom: 10px;
+    text-align: center;
+}

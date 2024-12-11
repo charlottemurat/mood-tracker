@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from "react";
 import { setDoc, doc, getDoc } from "firebase/firestore";
-import { db } from "./firebase";
+import { db } from "../firebase";
 import { useNavigate } from "react-router-dom";
-import Rating from "./components/Rating";
-import "./styles/Survey.css";
+import Rating from "../components/Rating";
+import "../styles/SurveyPage.css";
 
 function Survey({ user, onSurveyComplete }) {
   const questions = [
@@ -86,12 +86,14 @@ function Survey({ user, onSurveyComplete }) {
 
   return (
     <div>
-      <h1>Hi {user.displayName}, how are you feeling today?</h1>
-      <h2>{questions[currentQuestion]}</h2>
+      <h1 className="survey">Hi {user.displayName}, how are you feeling today?</h1>
+      <h2><u>{questions[currentQuestion]}</u></h2>
       <Rating key={currentQuestion} onRatingChange={(rating) => setRating(rating)}/>
-      <button onClick={handleNext}>
+      <div id="next-wrapper">
+      <button id="next-submit-button" onClick={handleNext}>
         {currentQuestion < questions.length - 1 ? "Next" : "Submit"}
       </button>
+      </div>
     </div>
   );
 }

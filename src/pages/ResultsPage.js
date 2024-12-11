@@ -3,8 +3,10 @@ import { doc, getDoc, getDocs, collection } from "firebase/firestore";
 import { db } from "../firebase";
 import LineChart from "../components/LineChart";
 import { entries } from "./testEntries"
+import { getAuth, setPersistence, browserLocalPersistence, onAuthStateChanged } from "firebase/auth";
+import "../styles/ResultsPage.css";
 
-function ResultsPage({ user }) {
+function ResultsPage({ user, setUser }) {
   const [weekSurveyData, setWeekSurveyData] = useState(null);
   const [monthSurveyData, setMonthSurveyData] = useState(null);
   const [weekChartTitle, setWeekChartTitle] = useState("");
@@ -19,7 +21,7 @@ function ResultsPage({ user }) {
       const allEntries = querySnapshot.docs.map((doc) => ({
         ...doc.data(), // All stored fields
       }));
-      return entries;
+      return allEntries;
 
     } catch (error) {
       console.error("Error fetching submissions:", error);
@@ -63,7 +65,7 @@ function ResultsPage({ user }) {
     for (let i = 0; i < 7; i++) {
       const data = await fetchAllSubmissions(user.uid);
       const ans = await fetchAnswersByDate(data, past7days[i]);
-      weeklyData[past7days[i]] = ans ? ans[questionIndex] : 0;
+      weeklyData[past7days[i]] = ans ? ans[questionIndex] : null;
     }
     console.log("week data", weeklyData);
     return weeklyData;
@@ -129,7 +131,7 @@ function ResultsPage({ user }) {
     for (let i = 0; i < 30; i++) {
       const data = await fetchAllSubmissions(user.uid);
       const ans = await fetchAnswersByDate(data, past30Days[i]);
-      monthlyData[past30Days[i]] = ans ? ans[questionIndex] : 0;
+      monthlyData[past30Days[i]] = ans ? ans[questionIndex] : null;
     }
     console.log("month data", monthlyData);
     return monthlyData;
@@ -161,6 +163,31 @@ function ResultsPage({ user }) {
   }
 
   useEffect(() => {
+    const auth = getAuth();
+    setPersistence(auth, browserLocalPersistence)
+      .then(() => {
+        console.log("Persistence set to localStorage");
+      })
+      .catch((error) => {
+        console.error("Error setting persistence: ", error);
+      });
+  }, []);
+
+  useEffect(() => {
+    const auth = getAuth();
+    const unsubscribe = onAuthStateChanged(auth, (user) => {
+      if (user) {
+        setUser(user); // If the user is logged in, set the user object
+      } else {
+        setUser(null); // If the user is logged out, clear the user object
+      }
+    });
+
+    return () => unsubscribe(); // Clean up the listener on unmount
+  });
+
+  useEffect(() => {
+    if (user) {
     async function loadResults() {
         const weekData = await createWeeklyData(getPast7Days(new Date().toISOString().split("T")[0]), 0);
         const weekTitle = "Weekly Data (" + Object.keys(weekData)[0] + " to " + Object.keys(weekData)[6] + ')';
@@ -210,6 +237,7 @@ function ResultsPage({ user }) {
       setLoading(false);
     }
     loadResults();
+  }
   }, [user]);
 
   if (loading) {
@@ -219,7 +247,8 @@ function ResultsPage({ user }) {
   return (
     <div>
       <h1>Results</h1>
-      <select onChange={(e) => {
+      <div id="dropdown-container">
+      <select id="question-dropdown" onChange={(e) => {
         generateWeeklyMoodChart(e.target.value);
         generateMonthlyMoodChart(e.target.value);
       }}>
@@ -229,20 +258,17 @@ function ResultsPage({ user }) {
         <option value="worried">Worried/Fearful</option>
         <option value="irritability">Irritability</option>
       </select>
-      <div>
+      </div>
       {weekSurveyData ? (
         <LineChart chartData={weekSurveyData} chartTitle={weekChartTitle}/>
       ) : (
         <p>No survey data found.</p>
       )}
-      </div>
-      <div>
       {monthSurveyData ? (
         <LineChart chartData={monthSurveyData} chartTitle={monthChartTitle}/>
       ) : (
         <p>No survey data found.</p>
       )}
-      </div>
     </div>
   );
 }

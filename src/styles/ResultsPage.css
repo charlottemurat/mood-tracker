@@ -1,0 +1,22 @@
+#dropdown-container {
+    text-align: center;
+}
+
+#question-dropdown {
+    font-family: "Palanquin Dark", sans-serif;
+    font-style: normal;
+    font-size: larger;
+    color: #EE964B;
+    border-color: #EE964B;
+    border-radius: 0px;
+    border-width: 4px;
+    background-color: #EBEBD3;
+    width: 180px;
+    margin-bottom: 30px;
+}
+
+canvas {
+    width: 1000px !important;
+    height: 500px !important;
+    margin: 0 auto 50px auto;
+}
