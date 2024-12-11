@@ -5,6 +5,7 @@ import LineChart from "../components/LineChart";
 import { entries } from "./testEntries"
 import { getAuth, setPersistence, browserLocalPersistence, onAuthStateChanged } from "firebase/auth";
 import "../styles/ResultsPage.css";
+import ReactLoading from 'react-loading';
 
 function ResultsPage({ user, setUser }) {
   const [weekSurveyData, setWeekSurveyData] = useState(null);
@@ -241,7 +242,7 @@ function ResultsPage({ user, setUser }) {
   }, [user]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <div id="loading-container"><ReactLoading type={'spokes'} color={'#080357'} height={50} width={50} /></div>;
   }
 
   return (
