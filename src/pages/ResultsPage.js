@@ -6,8 +6,12 @@ import { entries } from "./testEntries"
 import { getAuth, setPersistence, browserLocalPersistence, onAuthStateChanged } from "firebase/auth";
 import "../styles/ResultsPage.css";
 import ReactLoading from 'react-loading';
+import { useNavigate } from "react-router-dom";
+import { auth } from "../firebase";
+import { signOut } from "firebase/auth";
 
 function ResultsPage({ user, setUser }) {
+  const navigate = useNavigate();
   const [weekSurveyData, setWeekSurveyData] = useState(null);
   const [monthSurveyData, setMonthSurveyData] = useState(null);
   const [weekChartTitle, setWeekChartTitle] = useState("");
@@ -245,8 +249,23 @@ function ResultsPage({ user, setUser }) {
     return <div id="loading-container"><ReactLoading type={'spokes'} color={'#080357'} height={50} width={50} /></div>;
   }
 
+  const logOut = () => {
+    navigate("/");
+    signOut(auth);
+    setUser(null);
+  };
+
+  function toSurvey() {
+    navigate("/");
+  }
+
   return (
     <div>
+      <div id="header-top">
+        <button id="sign-out-button" onClick={logOut}>sign out</button>
+        <button id="view-log-button" onClick={toSurvey}>enter today's mood</button>
+      </div>
+      <div id="header-bottom"></div>
       <h1>Results</h1>
       <div id="dropdown-container">
       <select id="question-dropdown" onChange={(e) => {
