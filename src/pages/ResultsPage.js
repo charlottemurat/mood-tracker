@@ -48,7 +48,7 @@ function ResultsPage({ user, setUser }) {
 
   function formatDate(date) {
     const formatter = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York' });
-    return formatter.format(date);
+    return formatter.format(date)
   }
 
   function getPast7Days(dateString) {
@@ -64,7 +64,8 @@ function ResultsPage({ user, setUser }) {
       pastDate.setDate(inputDate.getDate() - i); // Subtract i days from the input date
   
       // Format the date to "yyyy-mm-dd"
-      past7Days.push(formatDate(pastDate));
+      const formattedDate = pastDate.toISOString().split("T")[0];
+      past7Days.push(formattedDate);
     }
     return past7Days;
   }
@@ -74,7 +75,7 @@ function ResultsPage({ user, setUser }) {
     for (let i = 0; i < 7; i++) {
       const data = await fetchAllSubmissions(user.uid);
       const ans = await fetchAnswersByDate(data, past7days[i]);
-      weeklyData[past7days[i]] = ans ? ans[questionIndex] : null;
+      weeklyData[formatDate(new Date(past7days[i]))] = ans ? ans[questionIndex] : null;
     }
     console.log("week data", weeklyData);
     return weeklyData;
@@ -99,7 +100,7 @@ function ResultsPage({ user, setUser }) {
     const moodIndex = moodToIndex(mood);
     var title;
 
-    const data = await createWeeklyData(getPast7Days(formatDate(new Date)), moodIndex);
+    const data = await createWeeklyData(getPast7Days(new Date().toISOString().split("T")[0]), moodIndex);
 
     title = "Weekly Data (" + Object.keys(data)[0] + " to " + Object.keys(data)[6] + ')';
     
@@ -129,7 +130,8 @@ function ResultsPage({ user, setUser }) {
       pastDate.setDate(inputDate.getDate() - i); // Subtract i days from the input date
   
       // Format the date to "yyyy-mm-dd"
-      past30Days.push(formatDate(pastDate));
+      const formattedDate = pastDate.toISOString().split("T")[0];
+      past30Days.push(formattedDate);
     }
     return past30Days;
   }
@@ -139,7 +141,7 @@ function ResultsPage({ user, setUser }) {
     for (let i = 0; i < 30; i++) {
       const data = await fetchAllSubmissions(user.uid);
       const ans = await fetchAnswersByDate(data, past30Days[i]);
-      monthlyData[past30Days[i]] = ans ? ans[questionIndex] : null;
+      monthlyData[formatDate(new Date(past30Days[i]))] = ans ? ans[questionIndex] : null;
     }
     console.log("month data", monthlyData);
     return monthlyData;
@@ -149,7 +151,7 @@ function ResultsPage({ user, setUser }) {
     const moodIndex = moodToIndex(mood);
     var title;
 
-    const data = await createMonthlyData(getPast30Days(formatDate(new Date())), moodIndex);
+    const data = await createMonthlyData(getPast30Days(new Date().toISOString().split("T")[0]), moodIndex);
 
     title = "Data from Past 30 Days (" + Object.keys(data)[0] + " to " + Object.keys(data)[29] + ')';
     
