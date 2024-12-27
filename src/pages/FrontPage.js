@@ -32,9 +32,7 @@ function Front({ user, setUser }) {
   };
   
   function toResults() {
-    console.log("navigating")
     navigate("/results");
-    console.log("navigated")
   }
 
   return (

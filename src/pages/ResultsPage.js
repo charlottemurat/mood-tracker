@@ -46,6 +46,11 @@ function ResultsPage({ user, setUser }) {
     return answers
   }
 
+  function formatDate(date) {
+    const formatter = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/New_York' });
+    return formatter.format(date);
+  }
+
   function getPast7Days(dateString) {
     // Parse the input date
     const inputDate = new Date(dateString);
@@ -59,8 +64,7 @@ function ResultsPage({ user, setUser }) {
       pastDate.setDate(inputDate.getDate() - i); // Subtract i days from the input date
   
       // Format the date to "yyyy-mm-dd"
-      const formattedDate = pastDate.toISOString().split("T")[0];
-      past7Days.push(formattedDate);
+      past7Days.push(formatDate(pastDate));
     }
     return past7Days;
   }
@@ -95,7 +99,7 @@ function ResultsPage({ user, setUser }) {
     const moodIndex = moodToIndex(mood);
     var title;
 
-    const data = await createWeeklyData(getPast7Days(new Date().toISOString().split("T")[0]), moodIndex);
+    const data = await createWeeklyData(getPast7Days(formatDate(new Date)), moodIndex);
 
     title = "Weekly Data (" + Object.keys(data)[0] + " to " + Object.keys(data)[6] + ')';
     
@@ -125,8 +129,7 @@ function ResultsPage({ user, setUser }) {
       pastDate.setDate(inputDate.getDate() - i); // Subtract i days from the input date
   
       // Format the date to "yyyy-mm-dd"
-      const formattedDate = pastDate.toISOString().split("T")[0];
-      past30Days.push(formattedDate);
+      past30Days.push(formatDate(pastDate));
     }
     return past30Days;
   }
@@ -146,7 +149,7 @@ function ResultsPage({ user, setUser }) {
     const moodIndex = moodToIndex(mood);
     var title;
 
-    const data = await createMonthlyData(getPast30Days(new Date().toISOString().split("T")[0]), moodIndex);
+    const data = await createMonthlyData(getPast30Days(formatDate(new Date())), moodIndex);
 
     title = "Data from Past 30 Days (" + Object.keys(data)[0] + " to " + Object.keys(data)[29] + ')';
     
